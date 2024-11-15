@@ -1,0 +1,23 @@
+- name: configure DB server
+  hosts: db
+  become: yes
+  vars:
+    login_host: db.cloudswathi.online
+  tasks:
+  - name: Install Mysql Server
+    ansible.builtin.dnf:
+      name: mysql-server
+      state: latest
+  - name: Start and Enable Myql server
+    ansible.builtin.service:
+      name: mysqld
+      state: started
+      enabled: yes
+  # check password is already set up or not.
+  - name: check DB connection
+    community.mysql.mysql_info:
+      login_user: root
+      login_password: ExpenseApp@1
+      login_host: "{{ login_host }}"
+
+
