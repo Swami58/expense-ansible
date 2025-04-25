@@ -55,7 +55,7 @@
       executable: pip3.9  # pip 3.11 if python version is 3.11
   # check password is already set up or not.
 
-  - name: import data from sql
+  - name: import data into mysql
     community.mysql.mysql_db:
       login_user: root
       login_password: "{{ login_password }}"
