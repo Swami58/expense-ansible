@@ -2,6 +2,8 @@
   become: yes
   hosts: backend
   vars:
+    login_host: cloudswathi.online
+    login_password: ExpenseApp@1
 
   tasks:
   - name: disable default nodejs
@@ -26,5 +28,38 @@
 
   - name: download backend code
     ansible.builtin.get_url:
-      url: 
-      
+      url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+      dest: /tmp/backend.zip
+
+  - name: unzip backend code
+    ansible.builtin.unarchive:
+      src: /tmp/backend.zip
+      dest: /app
+      remote_src: yes
+
+  - name: install npm dependices
+    ansible.builtin.command: npm install
+    args:
+      chdir: /app
+
+  - name: copy backend service
+    ansible.builtin.copy:
+      src: backend.service
+      dest: /etc/systemd/system/backend.service
+
+  - name: install python mysql dependencies
+    ansible.builtin.pip:
+      name: 
+      - PyMySQL
+      - cryptography
+      executable: pip3.9  # pip 3.11 if python version is 3.11
+  # check password is already set up or not.
+
+  - name: import data from sql
+    community.mysql.mysql_db:
+      login_user: root
+      login_password: "{{ login_password }}"
+      login_host: "{{ login_host }}"
+      target: /app/schema/backend.sql
+      state: dump
+      name: all
