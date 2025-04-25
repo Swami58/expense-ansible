@@ -2,7 +2,7 @@
   become: yes
   hosts: backend
   vars:
-    login_host: cloudswathi.online
+    login_host: db.cloudswathi.online
     login_password: ExpenseApp@1
 
   tasks:
