@@ -4,7 +4,6 @@
   vars:
     login_host: db.cloudswathi.online
     login_password: ExpenseApp@1
-
   tasks:
   - name: disable default nodejs
     ansible.builtin.command: dnf module disable nodejs -y
@@ -14,9 +13,12 @@
 
   - name: install nodejs
     ansible.builtin.dnf:
-      name: nodejs
+      name: "{{ item }}"
       state: installed
-
+    loop:
+    - nodejs
+    - mysql
+    
   - name: create expense user
     ansible.builtin.user:
       name: expense
